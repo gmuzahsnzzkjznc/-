@@ -1,0 +1,1 @@
+﻿<template><div class="metric"><div class="metric-top"><span>{{label}}</span><i :class="{warn:tone==='warn'}">{{icon}}</i></div><strong>{{value}}</strong><small :class="{warn:tone==='warn'}">{{delta}}</small></div></template><script setup>defineProps({label:String,value:String,delta:String,icon:String,tone:String})</script>

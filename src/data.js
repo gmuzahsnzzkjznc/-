@@ -12,8 +12,14 @@ export const products = [
   {id:7,name:'五常稻花香大米 5kg',category:'staple',price:59.9,oldPrice:79.9,unit:'袋',tag:'本月热卖',rating:4.8,sales:870,origin:'黑龙江五常',color:'#f5eccf',emoji:'🍚',desc:'粒粒饱满，米香浓郁，来自核心产区。'},
   {id:8,name:'高钙鲜牛奶 250ml*12',category:'drink',price:35.9,oldPrice:42.9,unit:'箱',tag:'买一赠一',rating:4.8,sales:1760,origin:'内蒙古',color:'#e5eef8',emoji:'🥛',desc:'奶香自然，冷藏配送，日期新鲜。'},
 ]
-export const store = reactive({ cart:[{productId:1,quantity:1},{productId:3,quantity:2}], favorites:[2], orders:[{id:'FS20261009028',status:'配送中',date:'2026-10-09 10:32',total:68.7,items:[1,3]},{id:'FS20261007116',status:'已完成',date:'2026-10-07 16:20',total:59.9,items:[7]}], user:{name:'林女士',phone:'138****2088',points:4280} })
+const defaultUser={name:'林女士',nickname:'林女士',phone:'138****2088',points:4280,gender:'保密',avatar:'',avatarPosition:'50% 50%'}
+const loadUser=()=>{try{return {...defaultUser,...JSON.parse(localStorage.getItem('fresh_user_profile')||'{}')}}catch{return defaultUser}}
+export const store = reactive({ cart:[{productId:1,quantity:1},{productId:3,quantity:2}], favorites:[2], orders:[{id:'FS20261009028',status:'配送中',date:'2026-10-09 10:32',total:68.7,items:[1,3]},{id:'FS20261007116',status:'已完成',date:'2026-10-07 16:20',total:59.9,items:[7]}], user:loadUser() })
+export const saveUserProfile=()=>{store.user.name=store.user.nickname;try{localStorage.setItem('fresh_user_profile',JSON.stringify({nickname:store.user.nickname,gender:store.user.gender,avatar:store.user.avatar,avatarPosition:store.user.avatarPosition}))}catch{}}
+export const addresses = reactive([{id:1,receiver:'林女士',phone:'138****2088',region:'上海市 静安区',detail:'南京西路 888 号 鲜选公寓 12F',label:'家',isDefault:true,current:true},{id:2,receiver:'林女士',phone:'138****2088',region:'上海市 徐汇区',detail:'漕溪北路 28 号 3 栋 502',label:'公司',isDefault:false,current:false}])
 export const cartCount = computed(() => store.cart.reduce((sum,item)=>sum+item.quantity,0))
 export const findProduct = id => products.find(p => p.id === Number(id))
 export const addToCart = (id, quantity=1) => { const item=store.cart.find(x=>x.productId===Number(id)); item ? item.quantity += quantity : store.cart.push({productId:Number(id),quantity}) }
 export const cartItems = computed(() => store.cart.map(i=>({...i,product:findProduct(i.productId),subtotal:findProduct(i.productId).price*i.quantity})))
+
+

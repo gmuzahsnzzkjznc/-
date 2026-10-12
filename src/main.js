@@ -8,7 +8,8 @@ const router = createRouter({ history: createWebHashHistory(), routes: [
   { path: '/cart', component: () => import('./views/Cart.vue') }, { path: '/checkout', component: () => import('./views/Checkout.vue') },
   { path: '/orders', component: () => import('./views/Orders.vue') }, { path: '/account', component: () => import('./views/Account.vue') },
   { path: '/membership', component: () => import('./views/Membership.vue') },
+  { path: '/addresses', component: () => import('./views/Addresses.vue') },
+  { path: '/settings', component: () => import('./views/AccountSettings.vue') },
   { path: '/login', component: () => import('./views/Login.vue') },
 ] })
 createApp(App).use(router).mount('#app')
-

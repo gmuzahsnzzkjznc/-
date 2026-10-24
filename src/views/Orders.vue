@@ -8,7 +8,7 @@
         <a @click="notify('优惠券功能即将开放')">♧ 优惠券 <em>3</em></a>
         <router-link to="/addresses">⌖ 收货地址</router-link>
         <router-link to="/settings">⚙ 账号设置</router-link>
-        <a @click="$router.push('/login')">↪ 退出登录</a>
+        <a @click="logout">↪ 退出登录</a>
       </aside>
       <div class="orders-main">
         <div class="page-heading"><div><span class="eyebrow">MY ORDERS</span><h1>我的订单</h1><p>查看订单进度，管理每一次新鲜到家。</p></div><router-link to="/category" class="secondary">继续买买买</router-link></div>
@@ -20,7 +20,9 @@
 </template>
 <script setup>
 import {computed,ref,inject} from 'vue'
+import {useRouter} from 'vue-router'
 import {store,findProduct} from '../data'
-const notify=inject('notify'),tab=ref('全部'),tabs=['全部','待付款','待配送','配送中','已完成']
+const notify=inject('notify'),router=useRouter(),tab=ref('全部'),tabs=['全部','待付款','待配送','配送中','已完成']
 const filtered=computed(()=>tab.value==='全部'?store.orders:store.orders.filter(o=>o.status===tab.value||tab.value==='配送中'&&o.status==='配送中'))
+const logout=()=>{sessionStorage.removeItem('fresh_token');sessionStorage.removeItem('fresh_role');router.replace('/login')}
 </script>

@@ -14,12 +14,27 @@ export const products = [
 ]
 const defaultUser={name:'林女士',nickname:'林女士',phone:'138****2088',points:4280,gender:'保密',avatar:'',avatarPosition:'50% 50%'}
 const loadUser=()=>{try{return {...defaultUser,...JSON.parse(localStorage.getItem('fresh_user_profile')||'{}')}}catch{return defaultUser}}
-export const store = reactive({ cart:[{productId:1,quantity:1},{productId:3,quantity:2}], favorites:[2], orders:[{id:'FS20261009028',status:'配送中',date:'2026-10-09 10:32',total:68.7,items:[1,3]},{id:'FS20261007116',status:'已完成',date:'2026-10-07 16:20',total:59.9,items:[7]}], user:loadUser() })
+const defaultMembership={name:'鲜选黄金会员',level:'gold',expireAt:'2027-10-24',usedBenefits:[]}
+const loadMembership=()=>{try{return {...defaultMembership,...JSON.parse(localStorage.getItem('fresh_membership')||'{}')}}catch{return {...defaultMembership,usedBenefits:[]}}}
+export const membershipBenefits=[
+  {id:'member-price',icon:'¥',name:'会员价',description:'购买商品享会员专属折扣',detail:'全场商品低至 95 折'},
+  {id:'member-day',icon:'日',name:'会员日',description:'会员日购买指定商品更优惠',detail:'指定商品可享 88 折'},
+  {id:'free-shipping',icon:'免',name:'免运费',description:'每日一次配送费免费',detail:'下单时自动抵扣配送费'},
+  {id:'exclusive-coupon',icon:'券',name:'专享券',description:'每周领取会员专属优惠券',detail:'每周可领 6 张专享券'},
+]
+export const store = reactive({ cart:[{productId:1,quantity:1},{productId:3,quantity:2}], favorites:[2], orders:[{id:'FS20261009028',status:'配送中',date:'2026-10-09 10:32',total:68.7,items:[1,3]},{id:'FS20261007116',status:'已完成',date:'2026-10-07 16:20',total:59.9,items:[7]}], user:loadUser(), membership:loadMembership() })
 export const saveUserProfile=()=>{store.user.name=store.user.nickname;try{localStorage.setItem('fresh_user_profile',JSON.stringify({nickname:store.user.nickname,gender:store.user.gender,avatar:store.user.avatar,avatarPosition:store.user.avatarPosition}))}catch{}}
+export const saveMembership=()=>{try{localStorage.setItem('fresh_membership',JSON.stringify(store.membership))}catch{}}
+export const useMembershipBenefit=(benefitId)=>{if(!store.membership.usedBenefits.includes(benefitId)){store.membership.usedBenefits.push(benefitId);saveMembership()}}
+export const activateMembership=(name,level)=>{store.membership.name=name;store.membership.level=level;store.membership.expireAt='2027-10-24';store.membership.usedBenefits=[];saveMembership()}
 export const addresses = reactive([{id:1,receiver:'林女士',phone:'138****2088',region:'上海市 静安区',detail:'南京西路 888 号 鲜选公寓 12F',label:'家',isDefault:true,current:true},{id:2,receiver:'林女士',phone:'138****2088',region:'上海市 徐汇区',detail:'漕溪北路 28 号 3 栋 502',label:'公司',isDefault:false,current:false}])
 export const cartCount = computed(() => store.cart.reduce((sum,item)=>sum+item.quantity,0))
 export const findProduct = id => products.find(p => p.id === Number(id))
 export const addToCart = (id, quantity=1) => { const item=store.cart.find(x=>x.productId===Number(id)); item ? item.quantity += quantity : store.cart.push({productId:Number(id),quantity}) }
 export const cartItems = computed(() => store.cart.map(i=>({...i,product:findProduct(i.productId),subtotal:findProduct(i.productId).price*i.quantity})))
+
+
+
+
 
 

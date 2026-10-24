@@ -22,6 +22,9 @@
 </template>
 <script setup>
 import { inject } from 'vue'
+import { activateMembership } from '../data'
 const notify = inject('notify')
-const purchase = name => notify(`已选择${name}，即将进入支付`)
+const purchase = name => { const level=name.includes('钻石')?'diamond':'gold'; activateMembership(name,level); notify(`已开通${name}，权益已同步到我的优惠券`) }
 </script>
+
+
